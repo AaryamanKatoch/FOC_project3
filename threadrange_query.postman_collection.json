@@ -1,0 +1,95 @@
+{
+    "variables": [],
+    "info": {
+        "name": "Test /post/threads endpoint",
+        "_postman_id": "e9021a81-d774-4a69-bf7e-37106e12e429",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "POST /post/threads with replies",
+            "request": {
+                "method": "POST",
+                "header": [],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"title\": \"Test Thread\",\n    \"description\": \"This is a test thread.\",\n    \"replies\": [\n        {\n            \"content\": \"This is a reply to the test thread.\"\n        },\n        {\n            \"content\": \"This is another reply to the test thread.\"\n        }\n    ]\n}"
+                },
+                "url": {
+                    "raw": "{{url}}",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "post",
+                        "threads"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "GET /post/threads with valid ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{url}}{{validThreadId}}",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "post",
+                        "threads",
+                        "{{validThreadId}}"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "GET /post/threads with invalid ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{url}}9999",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "post",
+                        "threads",
+                        "9999"
+                    ]
+                }
+            },
+            "response": []
+        },
+        {
+            "name": "GET /post/threads without specifying ID",
+            "request": {
+                "method": "GET",
+                "header": [],
+                "url": {
+                    "raw": "{{url}}",
+                    "host": [
+                        "localhost"
+                    ],
+                    "port": "5000",
+                    "path": [
+                        "post",
+                        "threads"
+                    ]
+                }
+            },
+            "response": []
+        }
+    ]
+}
+ 
+
+

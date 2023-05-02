@@ -1,0 +1,136 @@
+{
+    "variables": [],
+    "info": {
+        "name": "Test /post/threads endpoint",
+        "_postman_id": "e9021a81-d774-4a69-bf7e-37106e12e429",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+{
+    "name": "search posts by date range",
+    "event": [
+    {
+    "listen": "test",
+    "script": {
+    "exec": [
+    "// Set up variables for testing",
+    "const url = 'http://localhost:5000/post/search';",
+    "const start = '2023-04-01T00:00:00Z';",
+    "const end = '2023-04-30T23:59:59Z';",
+    "",
+    "// Test case 1: Search with valid start and end dates",
+    "pm.test('Search with valid start and end dates', function () {",
+    " pm.sendRequest({",
+    " url: url + '?start=' + start + '&end=' + end,",
+    " method: 'GET',",
+    " headers: {",
+    " 'Content-Type': 'application/json'",
+    " }",
+    " }, function (err, res) {",
+    " pm.expect(err).to.be.null;",
+    " pm.expect(res).to.have.property('status', 200);",
+    " pm.expect(res.json()).to.be.an('array');",
+    " });",
+    "});",
+    "",
+    "// Test case 2: Search with invalid date format",
+    "pm.test('Search with invalid date format', function () {",
+    " pm.sendRequest({",
+    " url: url + '?start=2023-04-01T00:00:00&end=2023-04-30T23:59:59',",
+    " method: 'GET',",
+    " headers: {",
+    " 'Content-Type': 'application/json'",
+    " }",
+    " }, function (err, res) {",
+    " pm.expect(err).to.be.null;",
+    " pm.expect(res).to.have.property('status', 400);",
+    " pm.expect(res.json()).to.have.property('error', 'bad request');",
+    " });",
+    "});",
+    "",
+    "// Test case 3: Search without specifying start or end date",
+    "pm.test('Search without specifying start or end date', function () {",
+    " pm.sendRequest({",
+    " url: url,",
+    " method: 'GET',",
+    " headers: {",
+    " 'Content-Type': 'application/json'",
+    " }",
+    " }, function (err, res) {",
+    " pm.expect(err).to.be.null;",
+    " pm.expect(res).to.have.property('status', 400);",
+    " pm.expect(res.json()).to.have.property('error', 'bad request');",
+    " });",
+    "});"
+    ],
+    "type": "text/javascript"
+    }
+    }
+    ],
+    "request": {},
+    "response": []
+},
+{
+    "name": "Search with start date in future",
+    "event": [
+        {
+            "listen": "test",
+            "script": {
+                "exec": [
+                    "const url = 'http://localhost:5000/post/search';",
+                    "const start = '2024-04-01T00:00:00Z';",
+                    "const end = '2024-04-30T23:59:59Z';",
+                    "",
+                    "pm.sendRequest({",
+                    "    url: url + '?start=' + start + '&end=' + end,",
+                    "    method: 'GET',",
+                    "    headers: {",
+                    "        'Content-Type': 'application/json'",
+                    "    }",
+                    "}, function (err, res) {",
+                    "    pm.expect(err).to.be.null;",
+                    "    pm.expect(res).to.have.property('status', 200);",
+                    "    pm.expect(res.json()).to.be.an('array');",
+                    "    pm.expect(res.json()).to.have.lengthOf(0);",
+                    "});"
+                ],
+                "type": "text/javascript"
+            }
+        }
+    ],
+    "request": {},
+    "response": []
+},
+{
+    "name": "Search with date range containing no posts",
+    "event": [
+        {
+            "listen": "test",
+            "script": {
+                "exec": [
+                    "const url = 'http://localhost:5000/post/search';",
+                    "const start = '2023-06-01T00:00:00Z';",
+                    "const end = '2023-06-30T23:59:59Z';",
+                    "",
+                    "pm.sendRequest({",
+                    "    url: url + '?start=' + start + '&end=' + end,",
+                    "    method: 'GET',",
+                    "    headers: {",
+                    "        'Content-Type': 'application/json'",
+                    "    }",
+                    "}, function (err, res) {",
+                    "    pm.expect(err).to.be.null;",
+                    "    pm.expect(res).to.have.property('status', 200);",
+                    "    pm.expect(res.json()).to.be.an('array');",
+                    "    pm.expect(res.json()).to.have.lengthOf(0);",
+                    "});"
+                ],
+                "type": "text/javascript"
+            }
+        }
+    ],
+    "request": {},
+    "response": []
+}
+    ]
+    }

@@ -1,0 +1,361 @@
+{
+	"info": {
+		"_postman_id": "e9021a81-d774-4a69-bf7e-37106e12e429",
+		"name": "forum: post, read, delete",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post hello",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = pm.response.json();",
+							"",
+							"pm.environment.set(\"id\", jsonData.id);",
+							"pm.environment.set(\"timestamp\", jsonData.timestamp);",
+							"pm.environment.set(\"key\", jsonData.key);",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"msg\": \"hello\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:5000/post",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post"
+					],
+					"query": [
+						{
+							"key": "msg",
+							"value": "hello",
+							"disabled": true
+						}
+					]
+				},
+				"description": "post hello"
+			},
+			"response": []
+		},
+		{
+			"name": "read post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.msg).to.eql(\"hello\");",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/post/{{id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{id}}"
+					]
+				},
+				"description": "post hello"
+			},
+			"response": []
+		},
+		{
+			"name": "delete post invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 403\", function () {",
+							"    pm.response.to.have.status(403);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/post/{{id}}/delete/not-a-valid-key",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{id}}",
+						"delete",
+						"not-a-valid-key"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete post",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/post/{{id}}/delete/{{key}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{id}}",
+						"delete",
+						"{{key}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "read post again",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 404\", function () {",
+							"    pm.response.to.have.status(404);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:5000/post/{{id}}",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5000",
+					"path": [
+						"post",
+						"{{id}}"
+					]
+				},
+				"description": "post hello"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete post with missing key",
+			"event": [
+			{
+			"listen": "test",
+			"script": {
+			"exec": [
+			"const url = 'http://localhost:5000/post/1/delete';",
+			"const data = {};",
+			"",
+			"pm.sendRequest({",
+			" url: url,",
+			" method: 'DELETE',",
+			" header: {",
+			" 'Content-Type': 'application/json'",
+			" },",
+			" body: {",
+			" mode: 'raw',",
+			" raw: JSON.stringify(data)",
+			" }",
+			"}, function (err, res) {",
+			" pm.expect(err).to.be.null;",
+			" pm.expect(res.status).to.eql(401);",
+			" pm.expect(res.json()).to.have.property('error');",
+			" pm.expect(res.json().error).to.eql('missing key');",
+			"});"
+			],
+			"type": "text/javascript"
+			}
+			}
+			],
+			"request": {},
+			"response": []
+			},
+			{
+				"name": "Delete post with missing key",
+				"event": [
+					{
+						"listen": "test",
+						"script": {
+							"id": "8c0fca91-39b2-4d11-9a2a-4fbfca4c99d3",
+							"exec": [
+								{
+									"type": "text/javascript",
+									"exec": [
+										"const url = 'http://localhost:5000/post/1/delete';",
+										"const data = {};",
+										"",
+										"pm.sendRequest({",
+										"    url: url,",
+										"    method: 'DELETE',",
+										"    header: {",
+										"        'Content-Type': 'application/json'",
+										"    },",
+										"    body: {",
+										"        mode: 'raw',",
+										"        raw: JSON.stringify(data)",
+										"    }",
+										"}, function (err, res) {",
+										"    pm.expect(err).to.be.null;",
+										"    pm.expect(res.status).to.eql(401);",
+										"    pm.expect(res.json()).to.have.property('error');",
+										"    pm.expect(res.json().error).to.eql('missing key');",
+										"});"
+									]
+								}
+							]
+						}
+					}
+				],
+				"request": {
+					"method": "DELETE",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"type": "text"
+						}
+					],
+					"body": {
+						"mode": "raw",
+						"raw": "{}"
+					},
+					"url": {
+						"raw": "http://localhost:5000/post/1/delete",
+						"protocol": "http",
+						"host": [
+							"localhost"
+						],
+						"port": "5000",
+						"path": [
+							"post",
+							"1",
+							"delete"
+						]
+					}
+				},
+				"response": []
+			},
+			{
+				"name": "Delete post with invalid key",
+				"event": [
+				{
+				"listen": "test",
+				"script": {
+				"exec": [
+				"const url = 'http://localhost:5000/post/1/delete';",
+				"const key = 'invalid_key';",
+				"const data = { 'key': key };",
+				"",
+				"pm.sendRequest({",
+				" url: url,",
+				" method: 'DELETE',",
+				" header: {",
+				" 'Content-Type': 'application/json'",
+				" },",
+				" body: {",
+				" mode: 'raw',",
+				" raw: JSON.stringify(data)",
+				" }",
+				"}, function (err, res) {",
+				" pm.expect(err).to.be.null;",
+				" pm.expect(res.status).to.eql(401);",
+				" pm.expect(res.json()).to.have.property('error');",
+				" pm.expect(res.json().error).to.eql('invalid key');",
+				"});"
+				],
+				"type": "text/javascript"
+				}
+				}
+				],
+				"request": {},
+				"response": []
+				}
+			
+
+
+	]
+}
